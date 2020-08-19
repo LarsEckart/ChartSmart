@@ -29,9 +29,10 @@ dependencies {
 
 tasks.withType(JavaCompile) {
     options.compilerArgs.add("-Xlint:all")
-    options.compilerArgs.add("--enable-preview")
-
     options.incremental = true
+
+    if (jdkWithPreviewFeatures())
+        options.compilerArgs.add("--enable-preview")
 }
 
 test {
@@ -41,5 +42,12 @@ test {
         exceptionFormat "full"
     }
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    jvmArgs("--enable-preview")
+    if (jdkWithPreviewFeatures())
+        jvmArgs("--enable-preview")
+}
+
+static def jdkWithPreviewFeatures() {
+    def currentJvm = org.gradle.internal.jvm.Jvm.current()
+    def matcher = currentJvm =~ /^\d+/
+    return matcher[0].toInteger() > 11
 }
