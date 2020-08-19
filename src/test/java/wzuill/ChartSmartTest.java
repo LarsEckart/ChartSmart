@@ -6,7 +6,10 @@ import org.approvaltests.awt.AwtApprovals;
 import org.approvaltests.reporters.QuietReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
+@EnabledOnOs(OS.MAC)
 @UseReporter(QuietReporter.class)
 class ChartSmartTest {
 
