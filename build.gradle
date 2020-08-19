@@ -1,0 +1,45 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation("com.approvaltests:approvaltests:9.2.0")
+
+    def junit4Version = "4.13"
+    def junitVintageVersion = "5.6.2"
+    def junitJupiterVersion = "5.6.2"
+    def junitPlatformVersion = "1.6.2"
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}")
+    testImplementation("junit:junit:${junit4Version}")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}") {
+        because "allows JUnit 3 and JUnit 4 tests to run"
+    }
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}") {
+        because "allows tests to run from IDEs that bundle older version of launcher"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add("-Xlint:all")
+    options.compilerArgs.add("--enable-preview")
+
+    options.incremental = true
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "skipped", "failed"
+        exceptionFormat "full"
+    }
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    jvmArgs("--enable-preview")
+}
