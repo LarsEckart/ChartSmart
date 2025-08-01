@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'application'
-    id 'info.solidsoft.pitest' version '1.15.0'
+    id 'info.solidsoft.pitest' version '1.19.0-rc.1'
 }
 
 java {
@@ -62,7 +62,7 @@ jacocoTestReport {
     reports {
         xml.required = false
         csv.required = false
-        html.destination file("${buildDir}/jacocoHtml")
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
 
